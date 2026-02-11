@@ -1,18 +1,38 @@
-// @ts-check
 import { defineConfig } from 'astro/config';
-
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
-
 import cloudflare from '@astrojs/cloudflare';
+import AstroPWA from '@vite-pwa/astro';
 
-// https://astro.build/config
 export default defineConfig({
-  integrations: [react()],
-
+  integrations: [
+    react(),
+    AstroPWA({
+      registerType: 'autoUpdate',
+      manifest: {
+        name: 'FLOW',
+        short_name: 'FLOW',
+        theme_color: '#ffffff',
+        background_color: '#ffffff',
+        display: 'standalone',
+        scope: '/',
+        start_url: '/',
+        icons: [
+          {
+            src: '/favicon.svg',
+            sizes: '192x192',
+            type: 'image/svg+xml',
+          },
+        ],
+      },
+      workbox: {
+        navigateFallback: '/404',
+        globPatterns: ['**/*.{css,js,html,svg,png,ico,txt}'],
+      },
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },
-
   adapter: cloudflare(),
 });
