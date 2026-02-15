@@ -1,19 +1,15 @@
 ---
-import { Button } from '@/components/ui/button';
-import '@/styles/global.css';
+import Layout from '@/layouts/Layout.astro';
+import { ExpenseInput } from '@/components/feature/home/ExpenseInput';
+import { getDrizzle } from '@/db/drizzle';
+import { categories } from '@/db/schema';
+
+const db = getDrizzle(Astro.locals.runtime.env.DB);
+const allCategories = await db.select().from(categories).orderBy(categories.order).all();
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
-  </head>
-  <body>
-    <h1>Astro</h1>
-    <Button>Button</Button>
-  </body>
-</html>
+<Layout title="Home">
+  <main class="h-full pb-20">
+    <ExpenseInput categories={allCategories} client:load />
+  </main>
+</Layout>

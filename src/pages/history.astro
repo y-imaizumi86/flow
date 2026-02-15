@@ -1,0 +1,120 @@
+---
+import { getDrizzle } from '@/db/drizzle';
+import { categories, expenses } from '@/db/schema';
+import Layout from '@/layouts/Layout.astro';
+import { and, desc, eq, gte, lte } from 'drizzle-orm';
+import { DonutChart } from '@/components/feature/history/DonutChart';
+import { DailyList } from '@/components/feature/history/DailyList';
+import { TAILWIND_TO_HEX } from '@/lib/constants';
+import { HistoryHeader } from '@/components/feature/history/HistoryHeader';
+const today = new Date();
+const currentMonth =
+  Astro.url.searchParams.get('month') ||
+  `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+
+const startDate = `${currentMonth}-01`;
+const [year, month] = currentMonth.split('-').map(Number);
+const endDateObj = new Date(year, month, 0);
+const endDate = `${currentMonth}-${endDateObj.getDate()}`;
+
+const prevDate = new Date(year, month - 2, 1);
+const nextDate = new Date(year, month, 1);
+
+const formatMonth = (d: Date) => {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+};
+
+const prevMonthParams = formatMonth(prevDate);
+const nextMonthParams = formatMonth(nextDate);
+
+const db = getDrizzle(Astro.locals.runtime.env.DB);
+const expenseList = await db
+  .select({
+    id: expenses.id,
+    amount: expenses.amount,
+    date: expenses.date,
+    memo: expenses.memo,
+    categoryId: expenses.categoryId,
+    categoryName: categories.name,
+    categoryIcon: categories.icon,
+    categoryColor: categories.color,
+  })
+  .from(expenses)
+  .leftJoin(categories, eq(expenses.categoryId, categories.id))
+  .where(and(gte(expenses.date, startDate), lte(expenses.date, endDate)))
+  .orderBy(desc(expenses.date));
+
+const totalAmount = expenseList.reduce((sum, item) => sum + item.amount, 0);
+
+const allCategories = await db.select().from(categories).orderBy(categories.order).all();
+
+const categorySummary = expenseList.reduce(
+  (acc, item) => {
+    const catId = item.categoryId;
+    if (!acc[catId]) {
+      // DBに保存されたTailwindクラスからHexカラーを取得
+      const twColor = item.categoryColor || 'bg-gray-100 text-gray-600';
+      const chartColor = TAILWIND_TO_HEX[twColor] || '#9ca3af';
+
+      acc[catId] = {
+        name: item.categoryName,
+        value: 0,
+        color: chartColor,
+        twColor: twColor,
+      };
+    }
+    acc[catId].value += item.amount;
+    return acc;
+  },
+  {} as Record<string, any>
+);
+
+const chartData = Object.values(categorySummary).sort((a, b) => b.value - a.value);
+---
+
+<Layout title="History">
+  <div class="flex h-full flex-col gap-y-4 bg-gray-50">
+    <HistoryHeader
+      currentYear={year}
+      currentMonth={month}
+      prevMonthParams={prevMonthParams}
+      nextMonthParams={nextMonthParams}
+      client:load
+    />
+    <div class="shrink-0 px-4 pt-1 pb-0">
+      <div class="relative flex h-64 overflow-hidden rounded-3xl bg-white shadow-sm">
+        <div class="flex w-1/2 items-center justify-center p-2">
+          <DonutChart data={chartData} totalAmount={totalAmount} client:load />
+        </div>
+
+        <div class="no-scrollbar w-1/2 overflow-y-auto border-l border-gray-50 bg-white p-3">
+          <div class="space-y-1">
+            {
+              chartData.map((cat: any) => {
+                const percent = totalAmount > 0 ? Math.round((cat.value / totalAmount) * 100) : 0;
+                return (
+                  <div class="flex flex-col gap-1 rounded-lg p-2 hover:bg-gray-50">
+                    <div class="flex items-center gap-2">
+                      <div class="h-2 w-2 rounded-full" style={`background-color: ${cat.color}`} />
+                      <span class="truncate text-xs font-bold text-gray-700">{cat.name}</span>
+                    </div>
+                    <div class="flex items-baseline justify-between pl-4">
+                      <span class="text-sm font-bold text-gray-900">
+                        ¥{cat.value.toLocaleString()}
+                      </span>
+                      <span class="text-[10px] text-gray-400">{percent}%</span>
+                    </div>
+                  </div>
+                );
+              })
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="no-scrollbar flex-1 overflow-y-auto px-4 pb-20">
+      <DailyList items={expenseList} categories={allCategories} client:load />
+    </div>
+  </div>
+</Layout>

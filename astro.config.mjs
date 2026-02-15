@@ -5,6 +5,7 @@ import cloudflare from '@astrojs/cloudflare';
 import AstroPWA from '@vite-pwa/astro';
 
 export default defineConfig({
+  output: 'server',
   integrations: [
     react(),
     AstroPWA({
@@ -31,8 +32,16 @@ export default defineConfig({
       },
     }),
   ],
+  devToolbar: {
+    enabled: false,
+  },
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      watch: {
+        ignored: ['**/.wrangler/**'],
+      },
+    },
   },
   adapter: cloudflare(),
 });

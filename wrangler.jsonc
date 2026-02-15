@@ -5,17 +5,18 @@
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
     "binding": "ASSETS",
-    "directory": "./dist",
+    "directory": "./dist"
   },
   "observability": {
-    "enabled": true,
+    "enabled": true
   },
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "flow-db",
-      "database_id": "2b433ccd-b1ef-49c6-94db-a80d5a89c864",
-      "migrations_dir": "drizzle",
-    },
-  ],
+      "database_name": "flow-db-prod",
+      "database_id": "2524d5bb-0f30-49fd-8402-281a32c42773",
+      "preview_database_id": "2b433ccd-b1ef-49c6-94db-a80d5a89c864",
+      "migrations_dir": "drizzle"
+    }
+  ]
 }

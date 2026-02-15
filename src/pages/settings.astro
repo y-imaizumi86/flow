@@ -1,0 +1,41 @@
+---
+import { CategoryList } from '@/components/feature/settings/CategoryList';
+import { CategoryAddDrawer } from '@/components/feature/settings/CategoryAddDrawer';
+import { getDrizzle } from '@/db/drizzle';
+import { categories } from '@/db/schema';
+import Layout from '@/layouts/Layout.astro';
+
+const db = getDrizzle(Astro.locals.runtime.env.DB);
+const allCategories = await db.select().from(categories).orderBy(categories.order).all();
+---
+
+<Layout title="Settings">
+  <div class="flex h-full flex-col bg-gray-50">
+    <div
+      class="sticky top-0 z-10 border-b border-gray-100 bg-white/95 p-4 text-center backdrop-blur-sm"
+    >
+      <h2 class="text-xl font-bold tracking-tight text-gray-900">Settings</h2>
+    </div>
+
+    <div class="flex flex-1 flex-col overflow-hidden">
+      <div class="flex flex-1 flex-col overflow-hidden">
+        <div class="shrink-0 p-4 pb-2">
+          <div class="flex items-center justify-between px-2">
+            <h3 class="text-sm font-bold tracking-wider text-gray-500 uppercase">Categories</h3>
+            <CategoryAddDrawer client:load />
+          </div>
+        </div>
+
+        <div class="no-scrollbar flex-1 overflow-y-auto px-4 pb-24">
+          <CategoryList items={allCategories} client:load />
+
+          <section class="mt-8">
+            <div class="px-2 text-center text-xs text-gray-400">
+              <p>App Version 0.0.1</p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
