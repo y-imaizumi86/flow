@@ -10,6 +10,7 @@ export default defineConfig({
     react(),
     AstroPWA({
       registerType: 'autoUpdate',
+      includeAssets: ['favicon.svg'],
       manifest: {
         name: 'FLOW',
         short_name: 'FLOW',
@@ -20,19 +21,19 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: '/icon-192.png',
+            src: 'icon-192.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: '/icon-512.png',
+            src: 'icon-512.png',
             sizes: '512x512',
             type: 'image/png',
           },
         ],
       },
       workbox: {
-        navigateFallback: '/404',
+        navigateFallback: '/',
         globPatterns: ['**/*.{css,js,html,svg,png,ico,txt}'],
       },
     }),
