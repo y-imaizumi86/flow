@@ -126,14 +126,14 @@ export const CategoryForm = ({ initialValues, onSuccess }: CategoryFormProps) =>
       <div className="space-y-6">
         <div className="space-y-3">
           <label className="text-xs font-bold tracking-wider text-gray-400 uppercase">Color</label>
-          <div className="grid grid-cols-6 place-items-center gap-3">
+          <div className="no-scrollbar flex gap-3 overflow-x-auto px-1 py-2">
             {AVAILABLE_COLORS.map((color) => (
               <button
                 key={color}
                 type="button"
                 onClick={() => setSelectedColor(color)}
                 className={cn(
-                  'flex h-10 w-10 items-center justify-center rounded-full transition-all',
+                  'flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all',
                   color,
                   selectedColor === color
                     ? 'scale-110 shadow-md ring-2 ring-gray-400'
@@ -148,7 +148,7 @@ export const CategoryForm = ({ initialValues, onSuccess }: CategoryFormProps) =>
 
         <div className="space-y-3">
           <label className="text-xs font-bold tracking-wider text-gray-400 uppercase">Icon</label>
-          <div className="grid grid-cols-6 place-items-center gap-3">
+          <div className="no-scrollbar flex gap-3 overflow-x-auto px-1 py-2">
             {AVAILABLE_ICONS.map((iconName) => {
               const Icon = IconMap[iconName] || Icons.HelpCircle;
               const isSelected = selectedIcon === iconName;
@@ -158,7 +158,7 @@ export const CategoryForm = ({ initialValues, onSuccess }: CategoryFormProps) =>
                   type="button"
                   onClick={() => setSelectedIcon(iconName)}
                   className={cn(
-                    'flex h-12 w-12 items-center justify-center rounded-xl border transition-all',
+                    'flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border transition-all',
                     isSelected
                       ? 'border-teal-200 bg-teal-50 text-teal-700 ring-2 ring-teal-100'
                       : 'border-gray-100 bg-white text-gray-400 hover:bg-gray-50 hover:text-gray-600'
