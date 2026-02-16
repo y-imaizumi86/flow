@@ -51,7 +51,7 @@ export const BottomTab = () => {
               )}
               <div className="relative z-10 flex flex-col items-center">
                 <Icon
-                  className={cn('mb-0.5 h-6 w-6 transition-transform', isActive && 'scale-110')}
+                  className={cn('mb-0.5 size-6 transition-transform', isActive && 'scale-110')}
                   strokeWidth={isActive ? 2.5 : 2}
                 />
                 <span

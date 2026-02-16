@@ -34,7 +34,7 @@ export const HistoryHeader = ({
           href={`?month=${prevMonthParams}`}
           className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-teal-600"
         >
-          <ChevronLeft className="h-6 w-6" />
+          <ChevronLeft className="size-6" />
         </a>
 
         <Drawer open={open} onOpenChange={setOpen}>
@@ -43,24 +43,24 @@ export const HistoryHeader = ({
               <span className="text-xl">
                 {currentYear}.{String(currentMonth).padStart(2, '0')}
               </span>
-              <Calendar className="h-4 w-4 text-gray-400" />
+              <Calendar className="size-4 text-gray-400" />
             </button>
           </DrawerTrigger>
           <DrawerContent>
-            <div className="mx-auto w-full max-w-sm p-4 pb-8">
+            <div className="mx-auto w-full max-w-sm p-4 pb-24">
               <div className="mb-6 flex items-center justify-between px-4">
                 <button
                   onClick={() => setSelectingYear((prev) => prev - 1)}
                   className="rounded-full p-2 hover:bg-gray-100"
                 >
-                  <ChevronLeft className="h-5 w-5" />
+                  <ChevronLeft className="size-5" />
                 </button>
                 <span className="text-lg font-bold">{selectingYear}</span>
                 <button
                   onClick={() => setSelectingYear((prev) => prev + 1)}
                   className="rounded-full p-2 hover:bg-gray-100"
                 >
-                  <ChevronRight className="h-5 w-5" />
+                  <ChevronRight className="size-5" />
                 </button>
               </div>
 
@@ -91,7 +91,7 @@ export const HistoryHeader = ({
           href={`?month=${nextMonthParams}`}
           className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-teal-600"
         >
-          <ChevronRight className="h-6 w-6" />
+          <ChevronRight className="size-6" />
         </a>
       </div>
     </div>

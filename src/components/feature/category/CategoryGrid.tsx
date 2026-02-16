@@ -42,11 +42,11 @@ export const CategoryGrid = ({ categories = [], selectedId, onSelect }: Category
                 isSelected ? 'scale-110 shadow-lg ring-4 ring-teal-500/30' : ''
               )}
             >
-              <Icon className="h-8 w-8" />
+              <Icon className="size-8" />
 
               {isSelected && (
                 <div className="animate-in zoom-in spin-in-12 absolute -top-1 -right-1 rounded-full bg-teal-600 p-1 text-white shadow-md duration-300">
-                  <Check className="h-3 w-3" strokeWidth={4} />
+                  <Check className="size-3" strokeWidth={4} />
                 </div>
               )}
             </div>

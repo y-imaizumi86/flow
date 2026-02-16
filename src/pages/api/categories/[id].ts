@@ -34,16 +34,23 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
     const { id } = params;
     if (!id) return new Response('Id required', { status: 400 });
 
-    // "Other" (ID: 6) は削除不可
-    if (id === '6') {
-      return new Response(JSON.stringify({ error: 'Cannot delete "Other" category' }), {
-        status: 400,
-      });
-    }
-
     const db = getDrizzle(locals.runtime.env.DB);
 
-    // 関連する支出があるか確認
+    const targetCategory = await db.select().from(categories).where(eq(categories.id, id)).get();
+
+    if (!targetCategory) {
+      return new Response('Category not found', { status: 404 });
+    }
+
+    const PROTECTED_NAMES = ['その他', 'Other', 'Others'];
+
+    if (PROTECTED_NAMES.includes(targetCategory.name)) {
+      return new Response(
+        JSON.stringify({ error: `「${targetCategory.name}」カテゴリは削除できません` }),
+        { status: 404 }
+      );
+    }
+
     const relatedExpenses = await db
       .select({ id: expenses.id })
       .from(expenses)
@@ -51,32 +58,28 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
       .limit(1);
 
     if (relatedExpenses.length > 0) {
-      // 代替カテゴリを探す (まず ID: 6 (Other) を優先)
-      let fallbackCategory = await db.select().from(categories).where(eq(categories.id, '6')).get();
+      let fallbackCategory = await db
+        .select()
+        .from(categories)
+        .where(eq(categories.name, 'その他'))
+        .get();
 
-      // ID: 6 がない場合、名前で探す
       if (!fallbackCategory) {
-        const otherCats = await db.select().from(categories).where(ne(categories.id, id));
-
-        fallbackCategory = otherCats.find(
-          (c) =>
-            c.name === 'Other' || c.name === 'Others' || c.name === 'その他' || c.name === 'Unknown'
+        const allCategories = await db.select().from(categories);
+        fallbackCategory = allCategories.find((c) =>
+          ['Other', 'Others', 'Unknown'].includes(c.name)
         );
-
-        // それでもなければ最初の1つ
-        if (!fallbackCategory && otherCats.length > 0) {
-          fallbackCategory = otherCats[0];
-        }
       }
 
       if (!fallbackCategory) {
         return new Response(
-          JSON.stringify({ error: 'Cannot delete the last category with expenses' }),
+          JSON.stringify({
+            error: '移行先の「その他」カテゴリが見つかりません。先に作成してください。',
+          }),
           { status: 400 }
         );
       }
 
-      // 支出のカテゴリを付け替え
       await db
         .update(expenses)
         .set({ categoryId: fallbackCategory.id })

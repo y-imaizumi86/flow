@@ -32,17 +32,17 @@ export const Keypad = ({ onInput, onDelete, onSubmit, className }: KeypadProps) 
 
       <Button
         variant="ghost"
-        className="h-10 rounded-2xl text-gray-500 transition-transform active:scale-95"
+        className="h-12 rounded-2xl text-red-500 transition-transform hover:bg-red-100 active:scale-95"
         onClick={onDelete}
       >
-        <Delete className="h-8 w-8" />
+        <Delete className="size-6" />
       </Button>
 
       <Button
         className="col-span-3 mt-2 h-12 rounded-2xl bg-teal-600 text-2xl font-bold text-white transition-transform hover:bg-teal-700 active:scale-95"
         onClick={onSubmit}
       >
-        <Check className="h-8 w-8" strokeWidth={3} />
+        <Check className="size-6" strokeWidth={3} />
       </Button>
     </div>
   );

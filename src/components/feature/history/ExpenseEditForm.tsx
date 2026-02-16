@@ -111,7 +111,7 @@ export const ExpenseEditForm = ({
       <div className="relative flex flex-1 flex-col items-center justify-center space-y-2 p-4">
         <DrawerClose asChild>
           <button className="absolute top-2 left-2 rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 active:bg-gray-200">
-            <X className="h-5 w-5" />
+            <X className="size-5" />
           </button>
         </DrawerClose>
         <div className="text-5xl font-bold tracking-tighter text-teal-900">
@@ -126,7 +126,7 @@ export const ExpenseEditForm = ({
           onClick={handleDeleteExpense}
           className="absolute top-2 right-2 rounded-full p-2 text-red-500 transition-colors hover:bg-red-50"
         >
-          <Trash2 className="h-5 w-5" />
+          <Trash2 className="size-5" />
         </button>
       </div>
       <div className="shadow-negative pb-safe rounded-t-3xl bg-white">

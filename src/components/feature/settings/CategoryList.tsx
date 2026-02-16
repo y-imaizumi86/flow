@@ -104,7 +104,7 @@ export const CategoryList = ({ items }: CategoryListProps) => {
                         category.color
                       )}
                     >
-                      <IconComponent className="h-6 w-6" />
+                      <IconComponent className="size-6" />
                     </div>
                     <span className="text-base font-bold text-gray-900">{category.name}</span>
                   </button>

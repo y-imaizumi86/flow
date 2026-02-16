@@ -4,7 +4,6 @@ import {
   ShoppingBag,
   Beer,
   Gamepad2,
-  MoreHorizontal,
   Shirt,
   Heart,
   Home,
@@ -18,12 +17,27 @@ import {
   Smartphone,
   Gift,
   Smile,
+  ShoppingBasket,
+  Baby,
+  Squirrel,
+  Stethoscope,
+  Pill,
+  Cat,
+  Dog,
+  CarFront,
+  Wrench,
+  Zap,
+  Droplet,
+  Flame,
+  Trash2,
+  Scissors,
+  MoreHorizontal,
 } from 'lucide-react';
 
 export const CATEGORIES = [
   {
     id: '1',
-    name: 'Food',
+    name: '食費',
     icon: Utensils,
     color: 'bg-orange-100 text-orange-600',
     activeColor: 'bg-orange-600 text-white',
@@ -31,7 +45,7 @@ export const CATEGORIES = [
   },
   {
     id: '2',
-    name: 'Transport',
+    name: '交通費',
     icon: TrainFront,
     color: 'bg-blue-100 text-blue-600',
     activeColor: 'bg-blue-600 text-white',
@@ -39,7 +53,7 @@ export const CATEGORIES = [
   },
   {
     id: '3',
-    name: 'Daily',
+    name: '日用品',
     icon: ShoppingBag,
     color: 'bg-green-100 text-green-600',
     activeColor: 'bg-green-600 text-white',
@@ -47,7 +61,7 @@ export const CATEGORIES = [
   },
   {
     id: '4',
-    name: 'Social',
+    name: '交際費',
     icon: Beer,
     color: 'bg-pink-100 text-pink-600',
     activeColor: 'bg-pink-600 text-white',
@@ -55,7 +69,7 @@ export const CATEGORIES = [
   },
   {
     id: '5',
-    name: 'Hobby',
+    name: '趣味・娯楽',
     icon: Gamepad2,
     color: 'bg-purple-100 text-purple-600',
     activeColor: 'bg-purple-600 text-white',
@@ -63,7 +77,7 @@ export const CATEGORIES = [
   },
   {
     id: '6',
-    name: 'Other',
+    name: 'その他',
     icon: MoreHorizontal,
     color: 'bg-gray-100 text-gray-600',
     activeColor: 'bg-gray-600 text-white',
@@ -72,25 +86,54 @@ export const CATEGORIES = [
 ] as const;
 
 export const AVAILABLE_ICONS = [
+  // Food & Drink
   'Utensils',
-  'TrainFront',
-  'ShoppingBag',
   'Beer',
-  'Gamepad2',
-  'MoreHorizontal',
-  'Shirt',
-  'Heart',
-  'Home',
-  'CreditCard',
-  'PiggyBank',
+  'ShoppingBasket',
+  'ShoppingBag',
+
+  // Transport
+  'TrainFront',
+  'CarFront',
   'Plane',
-  'Book',
-  'Music',
-  'Tv',
+
+  // House / Utilities
+  'Home',
   'Wifi',
+  'Zap',
+  'Droplet',
+  'Flame',
+  'Trash2',
   'Smartphone',
+
+  // Daily / Life
+  'Shirt',
+  'Scissors',
+  'Wrench',
   'Gift',
   'Smile',
+
+  // Health / Family
+  'Heart',
+  'Baby',
+  'Stethoscope',
+  'Pill',
+
+  // Pets
+  'Cat',
+  'Dog',
+  'Squirrel',
+
+  // Entertainment / Hobby
+  'Gamepad2',
+  'Tv',
+  'Music',
+  'Book',
+
+  // Finance / Other
+  'CreditCard',
+  'PiggyBank',
+  'MoreHorizontal',
 ] as const;
 
 export const AVAILABLE_COLORS = [

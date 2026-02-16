@@ -39,7 +39,7 @@ export function DonutChart({ data, totalAmount }: DonutChartProps) {
 
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-xs font-medium text-gray-400">Total</span>
-        <span className="text-2xl font-bold tracking-tight text-gray-900">
+        <span className="text-xl font-bold tracking-tight text-gray-900">
           ¥{totalAmount.toLocaleString()}
         </span>
       </div>
