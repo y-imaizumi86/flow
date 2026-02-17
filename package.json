@@ -19,7 +19,9 @@
     "stylelint": "stylelint '**/*.{css,scss,astro}'",
     "stylelint:fix": "stylelint '**/*.{css,scss,astro}' --fix",
     "format": "prettier --write .",
-    "format:all": "npm run lint:fix && npm run stylelint:fix && npm run format"
+    "format:all": "npm run lint:fix && npm run stylelint:fix && npm run format",
+    "db:migrate:local": "wrangler d1 migrations apply flow-db-prod --local",
+    "db:migrate:prod": "wrangler d1 migrations apply flow-db-prod --remote"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.12",

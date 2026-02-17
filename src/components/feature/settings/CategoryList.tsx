@@ -1,9 +1,9 @@
 import { Drawer, DrawerContent } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
-import { Reorder } from 'framer-motion';
+import { Reorder, useDragControls } from 'framer-motion';
 import * as Icons from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CategoryForm } from './CategoryForm';
 
 interface Category {
@@ -14,6 +14,51 @@ interface Category {
   order: number;
 }
 
+interface CategoryItemProps {
+  category: Category;
+  IconMap: Record<string, LucideIcon>;
+  onSelect: () => void;
+  onDragEnd: () => void;
+}
+
+const CategoryItem = ({ category, IconMap, onSelect, onDragEnd }: CategoryItemProps) => {
+  const dragControls = useDragControls();
+  const IconComponent =
+    category.icon && IconMap[category.icon] ? IconMap[category.icon] : Icons.HelpCircle;
+
+  return (
+    <Reorder.Item
+      value={category}
+      dragListener={false}
+      dragControls={dragControls}
+      onDragEnd={onDragEnd}
+      className="relative touch-none"
+    >
+      <div className="group flex w-full items-center justify-between rounded-xl border border-gray-100 bg-white p-3 shadow-sm transition-all hover:bg-gray-50 active:scale-[0.98]">
+        <button onClick={onSelect} className="flex flex-1 items-center gap-4 text-left">
+          <div
+            className={cn(
+              'flex h-12 w-12 items-center justify-center rounded-full transition-shadow group-hover:shadow-md',
+              category.color
+            )}
+          >
+            <IconComponent className="size-6" />
+          </div>
+          <span className="text-base font-bold text-gray-900">{category.name}</span>
+        </button>
+
+        {/* Drag Handle */}
+        <div
+          className="flex h-12 w-10 cursor-grab touch-none items-center justify-center text-gray-300 hover:text-gray-500 active:cursor-grabbing"
+          onPointerDown={(e) => dragControls.start(e)}
+        >
+          <Icons.GripVertical className="size-5" />
+        </div>
+      </div>
+    </Reorder.Item>
+  );
+};
+
 interface CategoryListProps {
   items: Category[];
 }
@@ -22,7 +67,6 @@ export const CategoryList = ({ items }: CategoryListProps) => {
   const [orderedItems, setOrderedItems] = useState(items);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const isDraggingRef = useRef(false);
 
   useEffect(() => {
     setOrderedItems(items);
@@ -66,64 +110,18 @@ export const CategoryList = ({ items }: CategoryListProps) => {
         onReorder={handleReorder}
         className="grid grid-cols-1 gap-3"
       >
-        {orderedItems.map((category) => {
-          const IconComponent =
-            category.icon && IconMap[category.icon] ? IconMap[category.icon] : Icons.HelpCircle;
-
-          return (
-            <Reorder.Item
-              key={category.id}
-              value={category}
-              onDragStart={() => {
-                isDraggingRef.current = true;
-              }}
-              onDragEnd={() => {
-                saveOrder();
-                isDraggingRef.current = false;
-              }}
-              className="relative"
-            >
-              <div className="group flex w-full items-center justify-between rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-all hover:bg-gray-50 active:scale-[0.98]">
-                <button
-                  onPointerDown={(e) => {
-                    isDraggingRef.current = false; // Reset
-                    // Store initial position on the button itself
-                    (e.currentTarget as HTMLElement).dataset.startX = e.clientX.toString();
-                    (e.currentTarget as HTMLElement).dataset.startY = e.clientY.toString();
-                  }}
-                  onClick={(e) => {
-                    const target = e.currentTarget as HTMLElement;
-                    const startX = parseFloat(target.dataset.startX || '0');
-                    const startY = parseFloat(target.dataset.startY || '0');
-                    const dist = Math.sqrt(
-                      Math.pow(e.clientX - startX, 2) + Math.pow(e.clientY - startY, 2)
-                    );
-
-                    // If moved more than 5px, consider it a drag
-                    if (dist > 5 || isDraggingRef.current) {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      return;
-                    }
-                    setSelectedCategory(category);
-                    setIsDrawerOpen(true);
-                  }}
-                  className="flex w-full items-center gap-4 text-left"
-                >
-                  <div
-                    className={cn(
-                      'flex h-12 w-12 items-center justify-center rounded-full transition-shadow group-hover:shadow-md',
-                      category.color
-                    )}
-                  >
-                    <IconComponent className="size-6" />
-                  </div>
-                  <span className="text-base font-bold text-gray-900">{category.name}</span>
-                </button>
-              </div>
-            </Reorder.Item>
-          );
-        })}
+        {orderedItems.map((category) => (
+          <CategoryItem
+            key={category.id}
+            category={category}
+            IconMap={IconMap}
+            onSelect={() => {
+              setSelectedCategory(category);
+              setIsDrawerOpen(true);
+            }}
+            onDragEnd={saveOrder}
+          />
+        ))}
       </Reorder.Group>
 
       <DrawerContent showOverlay={false}>
