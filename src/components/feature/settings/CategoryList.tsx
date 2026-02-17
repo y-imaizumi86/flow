@@ -79,16 +79,28 @@ export const CategoryList = ({ items }: CategoryListProps) => {
               }}
               onDragEnd={() => {
                 saveOrder();
-                setTimeout(() => {
-                  isDraggingRef.current = false;
-                }, 200);
+                isDraggingRef.current = false;
               }}
               className="relative"
             >
               <div className="group flex w-full items-center justify-between rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-all hover:bg-gray-50 active:scale-[0.98]">
                 <button
+                  onPointerDown={(e) => {
+                    isDraggingRef.current = false; // Reset
+                    // Store initial position on the button itself
+                    (e.currentTarget as HTMLElement).dataset.startX = e.clientX.toString();
+                    (e.currentTarget as HTMLElement).dataset.startY = e.clientY.toString();
+                  }}
                   onClick={(e) => {
-                    if (isDraggingRef.current) {
+                    const target = e.currentTarget as HTMLElement;
+                    const startX = parseFloat(target.dataset.startX || '0');
+                    const startY = parseFloat(target.dataset.startY || '0');
+                    const dist = Math.sqrt(
+                      Math.pow(e.clientX - startX, 2) + Math.pow(e.clientY - startY, 2)
+                    );
+
+                    // If moved more than 5px, consider it a drag
+                    if (dist > 5 || isDraggingRef.current) {
                       e.preventDefault();
                       e.stopPropagation();
                       return;
