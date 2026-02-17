@@ -1,7 +1,14 @@
 {
   "name": "flow",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "description": "Simple, fast, ad-free expense tracker PWA.",
+  "license": "MIT",
+  "author": "Yuta Imaizumi",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/y-imaizumi86/flow.git"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

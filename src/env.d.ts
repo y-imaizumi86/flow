@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/triple-slash-reference, @typescript-eslint/no-empty-object-type */
 /// <reference path="../.astro/types.d.ts" />
 
 type D1Database = import('@cloudflare/workers-types').D1Database;

@@ -4,12 +4,11 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 export const BottomTab = () => {
-  // 現在のパスをステートで管理
-  const [currentPath, setCurrentPath] = useState('');
+  const [currentPath, setCurrentPath] = useState(() =>
+    typeof window !== 'undefined' ? window.location.pathname : ''
+  );
 
   useEffect(() => {
-    setCurrentPath(window.location.pathname);
-
     const onPageLoad = () => {
       setCurrentPath(window.location.pathname);
     };
