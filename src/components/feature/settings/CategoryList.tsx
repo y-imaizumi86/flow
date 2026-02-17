@@ -1,4 +1,4 @@
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
+import { Drawer, DrawerContent } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 import { Reorder } from 'framer-motion';
 import * as Icons from 'lucide-react';
@@ -85,31 +85,30 @@ export const CategoryList = ({ items }: CategoryListProps) => {
               }}
               className="relative"
             >
-              <DrawerTrigger asChild>
-                <div className="group flex w-full items-center justify-between rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-all hover:bg-gray-50 active:scale-[0.98]">
-                  <button
-                    onClick={(e) => {
-                      if (isDraggingRef.current) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        return;
-                      }
-                      setSelectedCategory(category);
-                    }}
-                    className="flex w-full items-center gap-4 text-left"
+              <div className="group flex w-full items-center justify-between rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-all hover:bg-gray-50 active:scale-[0.98]">
+                <button
+                  onClick={(e) => {
+                    if (isDraggingRef.current) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      return;
+                    }
+                    setSelectedCategory(category);
+                    setIsDrawerOpen(true);
+                  }}
+                  className="flex w-full items-center gap-4 text-left"
+                >
+                  <div
+                    className={cn(
+                      'flex h-12 w-12 items-center justify-center rounded-full transition-shadow group-hover:shadow-md',
+                      category.color
+                    )}
                   >
-                    <div
-                      className={cn(
-                        'flex h-12 w-12 items-center justify-center rounded-full transition-shadow group-hover:shadow-md',
-                        category.color
-                      )}
-                    >
-                      <IconComponent className="size-6" />
-                    </div>
-                    <span className="text-base font-bold text-gray-900">{category.name}</span>
-                  </button>
-                </div>
-              </DrawerTrigger>
+                    <IconComponent className="size-6" />
+                  </div>
+                  <span className="text-base font-bold text-gray-900">{category.name}</span>
+                </button>
+              </div>
             </Reorder.Item>
           );
         })}
